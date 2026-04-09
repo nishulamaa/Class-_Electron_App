@@ -31,9 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }catch(err){
             console.error('Auto-save failed:',err);
             statusEl.textContent='Auto-save Error!';
-        }
-
-    }
+        } }
     let debounceTimer;
     textarea.addEventListener('input',()=>{
         statusEl.textContent='.Changes detected - auto-saving in 5s...';
