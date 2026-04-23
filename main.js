@@ -32,10 +32,10 @@ app.on('window-all-closed', () => {
 });
 
 // IPC Handlers
-ipcMain.handle('smart-save', async (event, text, filePath) => {
-    const targetPath = filePath || path.join(app.getPath('documents'), 'quicknote.txt');
-    fs.writeFileSync(targetPath, text, 'utf-8');
-    return { success: true ,filePath: targetPath};
+ipcMain.handle('save-note', async (event, text) => {
+    const filePath = path.join(app.getPath('documents'), 'quicknote.txt');
+    fs.writeFileSync(filePath, text, 'utf-8');
+    return { success: true };
 });
 
 ipcMain.handle('load-note', async () => {
@@ -65,8 +65,7 @@ ipcMain.handle('new-note', async (event) => {
         title: 'Unsaved Changes',
         message: 'You have unsaved changes. Start a new note anyway?'
     });
-    //return result.response === 0; // true if 'Discard Changes' is clicked
-    return {confirmed: result.response === 0};
+    return { confirmed: result.response === 0 };
 });
 ipcMain.handle('open-file', async (event) => {
     const result = await dialog.showOpenDialog({
@@ -80,10 +79,10 @@ ipcMain.handle('open-file', async (event) => {
     }
     const filePath = result.filePaths[0];
     const content = fs.readFileSync(filePath, 'utf-8');
-    return { success: true, content,filePath};
+    return { success: true, content, filePath };
 });
-/**ipcMain.handle('smart-save', async (event, text) => {
-    const filePath = filePath ||path.join(app.getPath('documents'), 'quicknote.txt');
-    fs.writeFileSync(filePath, text, 'utf-8');
-    return { success: true, filePath:targetPath};
-});*/
+ipcMain.handle('smart-save', async (event, text, filePath) => {
+    const targetPath = filePath || path.join(app.getPath('documents'), 'quicknote.txt');
+    fs.writeFileSync(targetPath, text, 'utf-8');
+    return { success: true, filePath: targetPath };
+});
